@@ -1,0 +1,2 @@
+cd /d "F:\4 th year\FYP\Progress Review - 2\Web"
+streamlit run predict_webapp.py
