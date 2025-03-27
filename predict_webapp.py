@@ -88,19 +88,20 @@ with tab1:
         if st.button("Predict Chemical Dosage"):
             input_data = pd.DataFrame([[hue, saturation, value]], columns=feature_columns)
             prediction = model.predict(input_data)[0]
+            predict_val = prediction / 4
 
-            percentage_ratio = (prediction / 500) * 100
-            required_chemical_liters = (prediction / 500) * flow_rate * 1000
+            percentage_ratio = (predict_val / 500) * 100
+            required_chemical_liters = (predict_val / 500) * flow_rate * 1000
             required_chemical_cubic_meters = required_chemical_liters / 1000
 
-            st.success(f"Chemical Required: {prediction:.2f} ml (per 500ml wastewater)")
+            st.success(f"Chemical Required: {predict_val:.2f} ml (per 500ml wastewater)")
             st.info(f"Dosage: {percentage_ratio:.2f}% of wastewater volume")
             st.warning(f"Estimated for {flow_rate} m³/h: {required_chemical_liters:.2f} L/h | {required_chemical_cubic_meters:.5f} m³/h")
 
             # Log Data to session_state (Keeps previous values)
             prediction_data = {
                 "Timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                "Predicted Chemical (ml)": prediction,
+                "Predicted Chemical (ml)": predict_val,
                 "Ratio (%)": percentage_ratio,
                 "Chemical Volume (L/h)": required_chemical_liters,
                 "Chemical Volume (m³/h)": required_chemical_cubic_meters
